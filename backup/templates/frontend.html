@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS control system</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body style="background-color:teal">
+    <div class="container">
+        <h1>Send SMS Control Command</h1>
+        <form id="smsForm" action="send_sms.py" method="POST">
+            <div class="form-group">
+                <label for="Device">Device ID:</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <input type="text" id="message" name="message" required>
+            </div>
+            <button type="submit" style="background-color:red" onClick="popup()">Send SMS</button>
+        </form>
+        <div id="response" class="response"></div>
+    </div>
+</body>
+<script>
+        document.getElementById("smsForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const message = document.getElementById("message").value;
+
+            const formData = new FormData();
+            formData.append("phoneNumber", phoneNumber);
+            formData.append("message", message);
+
+            fetch("send_sms.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("response").textContent = data;
+            })
+            .catch(error => {
+                document.getElementById("response").textContent = "Error sending message: " + error;
+            });
+        });
+
+        function popup() {
+            alert("YOUR MESSAGE HAS BEEN SUCCESSFULLY SENT")
+        }
+    </script>
+</html>
