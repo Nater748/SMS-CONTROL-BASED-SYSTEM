@@ -3,24 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM800C Status</title>
-    <script>
-        function checkSIM800C() {
-            fetch('http://<raspberry-pi-ip>:5000/check_sim800c')
-                .then(response => response.json())
-                .then(data => {
-                    const statusElement = document.getElementById('status');
-                    statusElement.innerHTML = `Status: ${data.status}<br>Message: ${data.message}`;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
+    <title>SMS Control System</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Check SIM800C Status</h1>
-    <button onclick="checkSIM800C()">Check Status</button>
-    <div id="status"></div>
+<body class="bg-teal">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">Send SMS Control Command</h1>
+        <!--<form id="smsForm" action="send_sms.py" method="POST">
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <input type="text" id="message" name="message" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-danger btn-block" onClick="popup()">Send SMS</button>
+        </form>
+        <div id="response" class="mt-3 text-center"></div>
+    </div> -->
+
+    <header class="bg-warning text-black text-center py-4">
+        <h1>Network Analyser</h1>
+        <p>Monitor, analyse and store Mobile Network Operator network signal information</p>
+    </header>
+    <main class="container text-center my-3 flex-grow-1">
+        <div class="mt-5  text-center  justify-content-center">
+            <h3>Network Module Status</h3>
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if network_operator is defined %}
+                                    {{ network_operator }}
+                                {% endif %}
+                            </h5>
+                            <p class="card-text">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>Module Detected:</strong> 
+                                        <span class="status-indicator {% if module_detected %}text-success{% else %}text-danger{% endif %}">
+                                            {% if module_detected %}✔ Yes{% else %}❌ No{% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>SIM Inserted:</strong> 
+                                        <span class="status-indicator {% if sim_inserted %}text-success{% else %}text-danger{% endif %}">
+                                            {% if sim_inserted %}✔ Yes{% else %}❌ No{% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <strong>Signal Strength:</strong> 
+                                        <span class="text-info">{{ signal_strength }}</span>
+                                    </li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!--<script>
+        document.getElementById("smsForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const message = document.getElementById("message").value;
+
+            const formData = new FormData();
+            formData.append("phoneNumber", phoneNumber);
+            formData.append("message", message);
+
+            fetch("send_sms.py", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("response").textContent = data;
+            })
+            .catch(error => {
+                document.getElementById("response").textContent = "Error sending message: " + error;
+            });
+        });
+
+        function popup() {
+            alert("YOUR MESSAGE HAS BEEN SUCCESSFULLY SENT");
+        }
+    </script> -->
 </body>
 </html>
